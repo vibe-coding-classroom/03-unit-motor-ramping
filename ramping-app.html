@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Motor Ramping Config - Unit 03</title>
+    <link rel="stylesheet" href="index.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>馬達 Ramping 組態設定</h1>
+            <p class="subtitle">單元 03：二進位協議與物理安全控制</p>
+        </header>
+
+        <main>
+            <div class="form-grid">
+                <!-- Offset 0: maxPwmLimit -->
+                <div class="input-group">
+                    <label for="maxPwmLimit">最大 PWM 限制</label>
+                    <input type="number" id="maxPwmLimit" value="255" min="0" max="255">
+                    <span class="helper-text">0-255 (預設 255)</span>
+                    <span class="error-message">數值超出安全範圍！</span>
+                </div>
+
+                <!-- Offset 4: minPwmLimit -->
+                <div class="input-group">
+                    <label for="minPwmLimit">最小 PWM 限制</label>
+                    <input type="number" id="minPwmLimit" value="0" min="0" max="100">
+                    <span class="helper-text">0-100 (預設 0)</span>
+                </div>
+
+                <!-- Offset 8: accelStep -->
+                <div class="input-group">
+                    <label for="accelStep">加速步進 (Accel)</label>
+                    <input type="number" id="accelStep" value="5" min="1" max="50">
+                    <span class="helper-text">單位：PWM / 20ms</span>
+                </div>
+
+                <!-- Offset 12: pwmStartKickT -->
+                <div class="input-group">
+                    <label for="pwmStartKickT">啟動衝擊力 (Kick)</label>
+                    <input type="number" id="pwmStartKickT" value="40" min="0" max="150">
+                    <span class="helper-text">克服靜摩擦的起始 PWM</span>
+                </div>
+
+                <!-- Offset 16: decelStep -->
+                <div class="input-group">
+                    <label for="decelStep">減速步進 (Decel)</label>
+                    <input type="number" id="decelStep" value="10" min="1" max="100">
+                    <span class="helper-text">單位：PWM / 20ms</span>
+                </div>
+
+                <!-- Offset 20: controlTimeoutMs -->
+                <div class="input-group">
+                    <label for="controlTimeoutMs">控制超時保護 (ms)</label>
+                    <input type="number" id="controlTimeoutMs" value="500" min="100" max="5000">
+                    <span class="helper-text">安全停車時間 (100-5000)</span>
+                </div>
+
+                <!-- Offset 24: idleWaitMs -->
+                <div class="input-group full-width">
+                    <label for="idleWaitMs">閒置自動斷電 (ms)</label>
+                    <input type="number" id="idleWaitMs" value="30000" min="5000" max="60000">
+                    <span class="helper-text">完全停等多久後釋放馬達 (5k-60k)</span>
+                </div>
+            </div>
+
+            <button id="sendBtn">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+                傳送組態設定
+            </button>
+
+            <div class="status-card">
+                <div class="status-header">
+                    <label>二進位封包預覽 (28 Bytes)</label>
+                    <div class="status-dot" id="statusDot"></div>
+                </div>
+                <pre id="hexPreview">等待資料輸入...</pre>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        const inputs = {
+            maxPwmLimit: document.getElementById('maxPwmLimit'),
+            minPwmLimit: document.getElementById('minPwmLimit'),
+            accelStep: document.getElementById('accelStep'),
+            pwmStartKickT: document.getElementById('pwmStartKickT'),
+            decelStep: document.getElementById('decelStep'),
+            controlTimeoutMs: document.getElementById('controlTimeoutMs'),
+            idleWaitMs: document.getElementById('idleWaitMs')
+        };
+        const sendBtn = document.getElementById('sendBtn');
+        const hexPreview = document.getElementById('hexPreview');
+        const statusDot = document.getElementById('statusDot');
+
+        function validateInputs() {
+            let isValid = true;
+            
+            // 任務 1：軟體保險絲 - 前端輸入驗證
+            // TODO: 實作輸入驗證邏輯
+            // 如果 maxPwmLimit > 255，應顯示錯誤並禁用按鈕
+            
+            if (parseInt(inputs.maxPwmLimit.value) > 255) {
+                inputs.maxPwmLimit.parentElement.classList.add('error');
+                isValid = false;
+            } else {
+                inputs.maxPwmLimit.parentElement.classList.remove('error');
+            }
+
+            sendBtn.disabled = !isValid;
+            return isValid;
+        }
+
+        function generatePayload() {
+            // 任務 2：二進位橋樑 - 資料結構映射 (28 Bytes)
+            const buffer = new ArrayBuffer(28);
+            const view = new DataView(buffer);
+
+            // TODO: 學生需在此實作 DataView 的寫入邏輯
+            // 提示：所有數值皆為 Int32，使用 Little-Endian (true)
+            // Offset 0: maxPwmLimit
+            // Offset 4: minPwmLimit
+            // ...
+            // Offset 12: pwmStartKickT
+            // ...
+            
+            // 範例 (請學生補完):
+            // view.setInt32(0, parseInt(inputs.maxPwmLimit.value), true);
+            
+            return buffer;
+        }
+
+        function updatePreview() {
+            if (!validateInputs()) {
+                hexPreview.textContent = "輸入資料有誤";
+                statusDot.classList.remove('active');
+                return;
+            }
+
+            const buffer = generatePayload();
+            const hexString = Array.from(new Uint8Array(buffer))
+                .map(b => b.toString(16).padStart(2, '0').toUpperCase())
+                .join(' ');
+            
+            hexPreview.textContent = hexString;
+            statusDot.classList.add('active');
+        }
+
+        // 監聽所有輸入變動
+        Object.values(inputs).forEach(input => {
+            input.addEventListener('input', updatePreview);
+        });
+
+        sendBtn.addEventListener('click', () => {
+            const buffer = generatePayload();
+            console.log("Sending binary payload:", buffer);
+            alert("組態已封裝並準備傳送！請檢查 Console。");
+        });
+
+        // 初始化預覽
+        updatePreview();
+    </script>
+</body>
+</html>

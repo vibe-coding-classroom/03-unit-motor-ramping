@@ -1,0 +1,51 @@
+name: GitHub Classroom Autograding
+on: [push]
+
+permissions:
+  checks: write
+  actions: read
+  contents: read
+
+jobs:
+  build:
+    name: Autograding
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      
+      - name: Install Dependencies
+        run: |
+          npm init -y
+          npm install @playwright/test
+          npx playwright install chromium
+      
+      - name: Autograding Reporter
+        uses: education/autograding-grading-reporter@v1
+        env:
+          TASK-1-SOFTWARE-FUSE-UI-VALIDATION_RESULTS: "${{steps.task-1.outputs.result}}"
+          TASK-2-BINARY-BRIDGE-PROTOCOL-MAPPING_RESULTS: "${{steps.task-2.outputs.result}}"
+        with:
+          runners: task-1,task-2
+
+      - name: Task 1: Software Fuse
+        id: task-1
+        uses: education/autograding-command-grader@v1
+        with:
+          test-name: "Task 1: Software Fuse"
+          setup-command: ""
+          command: "npx playwright test tests/ui-safety.spec.js"
+          timeout: 5
+          max-score: 40
+
+      - name: Task 2: Binary Bridge
+        id: task-2
+        uses: education/autograding-command-grader@v1
+        with:
+          test-name: "Task 2: Binary Bridge"
+          setup-command: ""
+          command: "node test-protocol.js"
+          timeout: 2
+          max-score: 60

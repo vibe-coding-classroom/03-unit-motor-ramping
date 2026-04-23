@@ -1,0 +1,28 @@
+{
+  "name": "03-unit-motor-ramping",
+  "version": "1.0.0",
+  "description": "針對 **`03-unit-motor-ramping` (馬達 Ramping 組態設定)** 單元，這是一個結合了「二進位通訊協議 (Binary Protocol)」與「物理安全控制」的高難度單元。",
+  "main": "test-protocol.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "npm run test:protocol && npm run test:ui",
+    "test:protocol": "node test-protocol.js",
+    "test:ui": "npx playwright test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vibe-coding-classroom/03-unit-motor-ramping.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/vibe-coding-classroom/03-unit-motor-ramping/issues"
+  },
+  "homepage": "https://github.com/vibe-coding-classroom/03-unit-motor-ramping#readme",
+  "devDependencies": {
+    "@playwright/test": "^1.59.1"
+  }
+}
