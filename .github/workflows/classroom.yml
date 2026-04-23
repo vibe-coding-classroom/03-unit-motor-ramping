@@ -46,5 +46,8 @@ jobs:
       - name: Autograding Reporter
         uses: education/autograding-grading-reporter@v1
         if: always()
+        env:
+          TASKONE_RESULTS: "${{steps.taskone.outputs.result}}"
+          TASKTWO_RESULTS: "${{steps.tasktwo.outputs.result}}"
         with:
           runners: taskone,tasktwo
