@@ -1,7 +1,7 @@
 {
   "tests": [
     {
-      "name": "Task 1: Software Fuse (UI Validation)",
+      "name": "Task 1 - Software Fuse",
       "setup": "npm install @playwright/test",
       "run": "npx playwright test tests/ui-safety.spec.js",
       "input": "",
@@ -11,7 +11,7 @@
       "points": 40
     },
     {
-      "name": "Task 2: Binary Bridge (Protocol Mapping)",
+      "name": "Task 2 - Binary Bridge",
       "setup": "",
       "run": "node test-protocol.js",
       "input": "",
