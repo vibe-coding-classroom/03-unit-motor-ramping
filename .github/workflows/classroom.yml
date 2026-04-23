@@ -21,7 +21,7 @@ jobs:
           npm init -y
           npm install @playwright/test
           npx playwright install chromium
-      
+
       - name: Task 1: Software Fuse
         id: task-1
         uses: education/autograding-command-grader@v1
