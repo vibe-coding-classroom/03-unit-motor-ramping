@@ -1,6 +1,3 @@
-Ran command: `ls functions/private_courses/ | grep "motor-ramping"`
-Viewed 03-unit-motor-ramping.html:1-551
-
 針對 **`03-unit-motor-ramping` (馬達 Ramping 組態設定)** 單元，這是一個結合了「二進位通訊協議 (Binary Protocol)」與「物理安全控制」的高難度單元。
 
 以下是在 **GitHub Classroom** 部署其作業 (Assignments) 的具體建議：
