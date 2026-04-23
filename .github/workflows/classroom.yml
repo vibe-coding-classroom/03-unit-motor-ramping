@@ -22,13 +22,6 @@ jobs:
           npm install @playwright/test
           npx playwright install chromium
       
-      - name: Autograding Reporter
-        uses: education/autograding-grading-reporter@v1
-        env:
-          TASK-1-SOFTWARE-FUSE-UI-VALIDATION_RESULTS: "${{steps.task-1.outputs.result}}"
-          TASK-2-BINARY-BRIDGE-PROTOCOL-MAPPING_RESULTS: "${{steps.task-2.outputs.result}}"
-        with:
-          runners: task-1,task-2
 
       - name: Task 1: Software Fuse
         id: task-1
@@ -49,3 +42,9 @@ jobs:
           command: "node test-protocol.js"
           timeout: 2
           max-score: 60
+
+      - name: Autograding Reporter
+        uses: education/autograding-grading-reporter@v1
+        if: always()
+        with:
+          runners: task-1,task-2
