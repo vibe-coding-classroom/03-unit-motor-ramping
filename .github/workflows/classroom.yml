@@ -47,4 +47,4 @@ jobs:
         uses: education/autograding-grading-reporter@v1
         if: always()
         with:
-          runners: "task-1,task-2"
+          runners: task-1, task-2
