@@ -12,31 +12,32 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-      
+
       - name: Install Dependencies
         run: |
           npm init -y
           npm install @playwright/test
           npx playwright install chromium
 
-      - name: Task 1: Software Fuse
+      - name: Task 1 - Software Fuse
         id: task-1
         uses: education/autograding-command-grader@v1
         with:
-          test-name: "Task 1: Software Fuse"
+          test-name: "Task 1 - Software Fuse"
           setup-command: ""
           command: "npx playwright test tests/ui-safety.spec.js"
           timeout: 5
           max-score: 40
 
-      - name: Task 2: Binary Bridge
+      - name: Task 2 - Binary Bridge
         id: task-2
         uses: education/autograding-command-grader@v1
         with:
-          test-name: "Task 2: Binary Bridge"
+          test-name: "Task 2 - Binary Bridge"
           setup-command: ""
           command: "node test-protocol.js"
           timeout: 2
