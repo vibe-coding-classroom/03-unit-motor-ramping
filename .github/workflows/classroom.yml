@@ -24,7 +24,7 @@ jobs:
           npx playwright install chromium
 
       - name: Task 1 - Software Fuse
-        id: task-1
+        id: taskone
         uses: education/autograding-command-grader@v1
         with:
           test-name: "Task 1 - Software Fuse"
@@ -34,7 +34,7 @@ jobs:
           max-score: 40
 
       - name: Task 2 - Binary Bridge
-        id: task-2
+        id: tasktwo
         uses: education/autograding-command-grader@v1
         with:
           test-name: "Task 2 - Binary Bridge"
@@ -47,4 +47,4 @@ jobs:
         uses: education/autograding-grading-reporter@v1
         if: always()
         with:
-          runners: task-1, task-2
+          runners: taskone,tasktwo
